@@ -2,7 +2,7 @@
 
 **An Automated Black-Box Framework for Auditing Tabular Machine Learning Models**
 
-This project investigates the trade-off between a machine learning model's *architectural complexity* and its *operational robustness* — how gracefully its performance degrades when the input data is corrupted by realistic noise.
+This project investigates the trade-off between a machine learning model's *architectural complexity* and its *operational robustness*: how gracefully its performance degrades when the input data is corrupted by realistic noise.
 
 > **Research question:** What is the relationship between a model's architectural complexity and its rate of performance degradation under black-box feature perturbation?
 
@@ -10,11 +10,11 @@ This project investigates the trade-off between a machine learning model's *arch
 
 ## Why this matters
 
-In production, trained models are frozen — but the world around them is not. Data drift, covariate shift, and upstream engineering bugs (e.g., a feature silently switching from monthly to annual units) corrupt model inputs long after deployment. Models then fail *silently*: no errors are raised, predictions simply get worse. This project builds a **domain-independent, black-box auditing tool** that quantifies a model's "safety margin" before deployment by measuring exactly how fast its performance decays as input noise increases.
+In production, trained models are frozen, but the world around them is not. Data drift, covariate shift, and upstream engineering bugs (e.g., a feature silently switching from monthly to annual units) corrupt model inputs long after deployment. Models then fail *silently*: no errors are raised, predictions simply get worse. This project builds a **domain-independent, black-box auditing tool** that quantifies a model's "safety margin" before deployment by measuring exactly how fast its performance decays as input noise increases.
 
 ## Experimental design
 
-The hypothesis is tested on a 2×2 matrix — two model complexities across two tabular domains with very different class distributions:
+The hypothesis is tested on a 2×2 matrix, testing two model complexities across two tabular domains with very different class distributions:
 
 |                          | **Domain A: Customer Churn** (balanced, ~50/50) | **Domain B: Credit Card Fraud** (imbalanced, ~0.1% positive) |
 | ------------------------ | ----------------------------------------------- | ------------------------------------------------------------ |
@@ -30,7 +30,7 @@ and tracks metric decay (F1, ROC-AUC, PR-AUC) across noise levels, producing **m
 
 ## Project status
 
-🚧 **Work in progress** — the project is being built incrementally. Current stage: **data acquisition and exploration** (Domain A).
+🚧 **Work in progress**. The project is being built incrementally. Current stage: **data acquisition and exploration** (Domain A).
 
 - [x] Environment and repository setup
 - [x] Automated dataset download (Telco Customer Churn)
@@ -46,7 +46,7 @@ and tracks metric decay (F1, ROC-AUC, PR-AUC) across noise levels, producing **m
 ```
 robustness-under-stress/
 ├── data/
-│   └── raw/              # Datasets (gitignored — downloaded automatically)
+│   └── raw/              # Datasets (gitignored, downloaded automatically)
 ├── notebooks/
 │   └── explore.ipynb     # Data download + exploratory analysis
 ├── requirements.txt      # Python dependencies
@@ -76,14 +76,14 @@ pip install -r requirements.txt
 jupyter notebook
 ```
 
-Open `notebooks/explore.ipynb` and run it top to bottom. **No manual data download is needed** — the first cells fetch the Telco Customer Churn dataset automatically into `data/raw/`.
+Open `notebooks/explore.ipynb` and run it top to bottom. **No manual data download is needed**: the first cells fetch the Telco Customer Churn dataset automatically into `data/raw/`.
 
 ## Data
 
 | Dataset | Domain | Source | Acquisition |
 | --- | --- | --- | --- |
 | Telco Customer Churn | churn (balanced) | [IBM sample dataset](https://github.com/IBM/telco-customer-churn-on-icp4d) | auto-downloaded by the notebook |
-| Credit Card Fraud | fraud (imbalanced) | [ULB / OpenML](https://www.openml.org/d/1597) | planned — fetched via `sklearn.datasets.fetch_openml` |
+| Credit Card Fraud | fraud (imbalanced) | [ULB / OpenML](https://www.openml.org/d/1597) | planned, fetched via `sklearn.datasets.fetch_openml` |
 
 Note: the Telco dataset is a *fictional* sample published by IBM and widely used as a community benchmark. This is acceptable here because the research question concerns model degradation behaviour, not telco business insight. The fraud dataset contains real (anonymised) transactions.
 
