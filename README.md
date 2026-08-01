@@ -16,7 +16,7 @@ In production, trained models are frozen, but the world around them is not. Data
 
 The hypothesis is tested on a 2×2 matrix, testing two model complexities across two tabular domains with very different class distributions:
 
-|                          | **Domain A: Customer Churn** (balanced, ~50/50) | **Domain B: Credit Card Fraud** (imbalanced, ~0.1% positive) |
+|                          | **Domain A: Customer Churn** (moderately imbalanced, ~73/27) | **Domain B: Credit Card Fraud** (extremely imbalanced, ~0.1% positive) |
 | ------------------------ | ----------------------------------------------- | ------------------------------------------------------------ |
 | **Logistic Regression**  | low complexity baseline                          | low complexity baseline                                       |
 | **XGBoost**              | high complexity ensemble                         | high complexity ensemble                                      |
@@ -48,10 +48,14 @@ and tracks metric decay (F1, ROC-AUC, PR-AUC) across noise levels, producing **m
 ```
 robustness-under-stress/
 ├── data/
-│   └── raw/              # Datasets (gitignored, downloaded automatically)
+│   ├── raw/                  # Datasets (gitignored, downloaded automatically)
+│   └── processed/            # Cleaned data (gitignored)
 ├── notebooks/
-│   └── explore.ipynb     # Data download + exploratory analysis
-├── requirements.txt      # Python dependencies
+│   ├── explore_churn.ipynb   # Data download + exploratory analysis
+│   ├── train_churn.ipynb     # LR and XGBoost baselines, frozen to outputs/models
+│   └── audit_churn.ipynb     # Perturbation engine, audit loop, degradation curves
+├── outputs/                  # Frozen models, results tables, figures (gitignored)
+├── requirements.txt          # Python dependencies
 └── README.md
 ```
 
@@ -78,13 +82,17 @@ pip install -r requirements.txt
 jupyter notebook
 ```
 
-Open `notebooks/explore.ipynb` and run it top to bottom. **No manual data download is needed**: the first cells fetch the Telco Customer Churn dataset automatically into `data/raw/`.
+Run the notebooks in order, each one top to bottom:
+
+1. `notebooks/explore_churn.ipynb` downloads and cleans the data (**no manual download needed**, the first cells fetch the Telco dataset into `data/raw/`)
+2. `notebooks/train_churn.ipynb` trains the baselines and freezes them to `outputs/models/`
+3. `notebooks/audit_churn.ipynb` runs the black box audit and produces the degradation curves
 
 ## Data
 
 | Dataset | Domain | Source | Acquisition |
 | --- | --- | --- | --- |
-| Telco Customer Churn | churn (balanced) | [IBM sample dataset](https://github.com/IBM/telco-customer-churn-on-icp4d) | auto-downloaded by the notebook |
+| Telco Customer Churn | churn (moderately imbalanced, ~73/27) | [IBM sample dataset](https://github.com/IBM/telco-customer-churn-on-icp4d) | auto-downloaded by the notebook |
 | Credit Card Fraud | fraud (imbalanced) | [ULB / OpenML](https://www.openml.org/d/1597) | planned, fetched via `sklearn.datasets.fetch_openml` |
 
 Note: the Telco dataset is a *fictional* sample published by IBM and widely used as a community benchmark. This is acceptable here because the research question concerns model degradation behaviour, not telco business insight. The fraud dataset contains real (anonymised) transactions.
