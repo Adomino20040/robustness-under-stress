@@ -30,16 +30,18 @@ and tracks metric decay (F1, ROC-AUC, PR-AUC) across noise levels, producing **m
 
 ## Project status
 
-🚧 **Work in progress**. The project is being built incrementally. Current stage: **data acquisition and exploration** (Domain A).
+🚧 **Work in progress**. The project is being built incrementally. Current stage: **Domain A audited, Domain B (fraud) up next**.
 
 - [x] Environment and repository setup
 - [x] Automated dataset download (Telco Customer Churn)
 - [x] Exploratory data analysis
 - [x] Preprocessing and baseline models (Logistic Regression, XGBoost)
-- [ ] Black-box perturbation engine
-- [ ] Audit loop and degradation metrics
+- [x] Black-box perturbation engine
+- [x] Audit loop and degradation metrics
 - [ ] Second domain (Credit Card Fraud)
 - [ ] Degradation curves, analysis, and final report
+
+**First result (Domain A):** the hypothesis holds on churn. At 20% noise, XGBoost loses 8.9% ROC-AUC and 27% F1 against its clean baseline, while Logistic Regression loses only 4.1% and 3.4%. The complex ensemble degrades roughly 2x faster on every metric.
 
 ## Repository structure
 
