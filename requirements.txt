@@ -1,4 +1,6 @@
 # Core dependencies -- kept minimal, extended as the project grows
 pandas>=2.0
-scikit-learn>=1.4
+scikit-learn==1.7.2  # frozen: 1.7.2 is the version the churn models were trained and pickled with
+xgboost==3.3.0       # frozen to match the environment that produced the trained models
 jupyter>=1.0
+matplotlib>=3.8      # degradation curves
