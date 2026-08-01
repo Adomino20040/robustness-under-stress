@@ -35,7 +35,7 @@ and tracks metric decay (F1, ROC-AUC, PR-AUC) across noise levels, producing **m
 - [x] Environment and repository setup
 - [x] Automated dataset download (Telco Customer Churn)
 - [x] Exploratory data analysis
-- [ ] Preprocessing and baseline models (Logistic Regression, XGBoost)
+- [x] Preprocessing and baseline models (Logistic Regression, XGBoost)
 - [ ] Black-box perturbation engine
 - [ ] Audit loop and degradation metrics
 - [ ] Second domain (Credit Card Fraud)
