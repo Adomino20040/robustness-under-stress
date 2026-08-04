@@ -30,7 +30,7 @@ and tracks metric decay (F1, ROC-AUC, PR-AUC) across noise levels, producing **m
 
 ## Project status
 
-🚧 **Work in progress**. The project is being built incrementally. Current stage: **Domain A audited, Domain B (fraud) up next**.
+🚧 **Work in progress**. The project is being built incrementally. Current stage: **both domains audited, cross-domain analysis and final report up next**.
 
 - [x] Environment and repository setup
 - [x] Automated dataset download (Telco Customer Churn)
@@ -38,10 +38,16 @@ and tracks metric decay (F1, ROC-AUC, PR-AUC) across noise levels, producing **m
 - [x] Preprocessing and baseline models (Logistic Regression, XGBoost)
 - [x] Black-box perturbation engine
 - [x] Audit loop and degradation metrics
-- [ ] Second domain (Credit Card Fraud)
-- [ ] Degradation curves, analysis, and final report
+- [x] Second domain (Credit Card Fraud)
+- [ ] Cross-domain analysis and final report
 
-**First result (Domain A):** the hypothesis holds on churn. At 20% noise, XGBoost loses 8.9% ROC-AUC and 27% F1 against its clean baseline, while Logistic Regression loses only 4.1% and 3.4%. The complex ensemble degrades roughly 2x faster on every metric.
+### Results so far
+
+**Domain A (churn): the hypothesis holds.** At 20% noise, XGBoost loses 8.9% ROC-AUC and 27% F1 against its clean baseline, while Logistic Regression loses only 4.1% and 3.4%. The complex ensemble degrades roughly 2x faster on every metric.
+
+**Domain B (fraud): the hypothesis does not hold.** Both models are essentially noise-immune: every metric drops less than 3% at 20% noise (LR ROC-AUC −0.1%, XGBoost F1 −2.5%), and XGBoost's ROC-AUC and PR-AUC even improve marginally under the strongest perturbation. Degradation under noise appears to be **domain-dependent rather than purely a function of model complexity** — a more interesting finding than a clean confirmation, and the focus of the upcoming analysis.
+
+Methodological note: churn F1 scores use a fixed 0.5 decision threshold, while fraud F1 scores use a per-model threshold tuned for optimal F1 on the clean test set (necessary given the ~0.1% positive rate). The F1 columns of the two domains are therefore not directly comparable; ROC-AUC and PR-AUC are threshold-free and comparable.
 
 ## Repository structure
 
@@ -51,9 +57,12 @@ robustness-under-stress/
 │   ├── raw/                  # Datasets (gitignored, downloaded automatically)
 │   └── processed/            # Cleaned data (gitignored)
 ├── notebooks/
-│   ├── explore_churn.ipynb   # Data download + exploratory analysis
-│   ├── train_churn.ipynb     # LR and XGBoost baselines, frozen to outputs/models
-│   └── audit_churn.ipynb     # Perturbation engine, audit loop, degradation curves
+│   ├── explore_churn.ipynb   # Churn: data download + exploratory analysis
+│   ├── train_churn.ipynb     # Churn: LR and XGBoost baselines, frozen to outputs/models
+│   ├── audit_churn.ipynb     # Churn: perturbation engine, audit loop, degradation curves
+│   ├── explore_fraud.ipynb   # Fraud: data download + exploratory analysis
+│   ├── train_fraud.ipynb     # Fraud: LR and XGBoost baselines, frozen to outputs/models
+│   └── audit_fraud.ipynb     # Fraud: black-box audit and degradation curves
 ├── outputs/                  # Frozen models, results tables, figures (gitignored)
 ├── requirements.txt          # Python dependencies
 └── README.md
@@ -82,18 +91,21 @@ pip install -r requirements.txt
 jupyter notebook
 ```
 
-Run the notebooks in order, each one top to bottom:
+Run the notebooks in order, each one top to bottom (per domain: explore → train → audit):
 
 1. `notebooks/explore_churn.ipynb` downloads and cleans the data (**no manual download needed**, the first cells fetch the Telco dataset into `data/raw/`)
 2. `notebooks/train_churn.ipynb` trains the baselines and freezes them to `outputs/models/`
 3. `notebooks/audit_churn.ipynb` runs the black box audit and produces the degradation curves
+4. `notebooks/explore_fraud.ipynb`, `notebooks/train_fraud.ipynb`, `notebooks/audit_fraud.ipynb` repeat the same pipeline on the fraud dataset (auto-fetched from OpenML)
+
+Note: the notebooks use relative paths (`../data`, `../outputs`), so run them with `notebooks/` as the working directory (the default when launched via `jupyter notebook` from the repo root).
 
 ## Data
 
 | Dataset | Domain | Source | Acquisition |
 | --- | --- | --- | --- |
 | Telco Customer Churn | churn (moderately imbalanced, ~73/27) | [IBM sample dataset](https://github.com/IBM/telco-customer-churn-on-icp4d) | auto-downloaded by the notebook |
-| Credit Card Fraud | fraud (imbalanced) | [ULB / OpenML](https://www.openml.org/d/1597) | planned, fetched via `sklearn.datasets.fetch_openml` |
+| Credit Card Fraud | fraud (extremely imbalanced, ~0.1% positive) | [ULB / OpenML](https://www.openml.org/d/1597) | auto-downloaded via `sklearn.datasets.fetch_openml` |
 
 Note: the Telco dataset is a *fictional* sample published by IBM and widely used as a community benchmark. This is acceptable here because the research question concerns model degradation behaviour, not telco business insight. The fraud dataset contains real (anonymised) transactions.
 
