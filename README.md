@@ -43,9 +43,9 @@ and tracks metric decay (F1, ROC-AUC, PR-AUC) across noise levels, producing **m
 
 ### Results so far
 
-**Domain A (churn): the hypothesis holds.** At 20% noise, XGBoost loses 8.9% ROC-AUC and 27% F1 against its clean baseline, while Logistic Regression loses only 4.1% and 3.4%. The complex ensemble degrades roughly 2x faster on every metric.
+**Domain A (churn): the hypothesis holds.** At 20% noise, XGBoost loses 8.9% ROC-AUC, 27.0% F1, and 18.9% PR-AUC against its clean baseline, while Logistic Regression loses only 4.1%, 3.4%, and 10.7%. The complex ensemble degrades roughly 2x faster on every metric (1.8x on PR-AUC, up to 8x on F1).
 
-**Domain B (fraud): the hypothesis does not hold.** Both models are essentially noise-immune: every metric drops less than 3% at 20% noise (LR ROC-AUC −0.1%, XGBoost F1 −2.5%), and XGBoost's ROC-AUC and PR-AUC even improve marginally under the strongest perturbation. Degradation under noise appears to be **domain-dependent rather than purely a function of model complexity** — a more interesting finding than a clean confirmation, and the focus of the upcoming analysis.
+**Domain B (fraud): the hypothesis does not hold.** Both models are essentially noise-immune at 20% noise: Logistic Regression loses 0.1% ROC-AUC, 1.5% F1, and 0.1% PR-AUC; XGBoost loses 2.5% F1 while its ROC-AUC (+0.2%) and PR-AUC (+1.2%) even improve marginally under the strongest perturbation. Degradation under noise appears to be **domain-dependent rather than purely a function of model complexity** — a more interesting finding than a clean confirmation, and the focus of the upcoming analysis.
 
 Methodological note: churn F1 scores use a fixed 0.5 decision threshold, while fraud F1 scores use a per-model threshold tuned for optimal F1 on the clean test set (necessary given the ~0.1% positive rate). The F1 columns of the two domains are therefore not directly comparable; ROC-AUC and PR-AUC are threshold-free and comparable.
 
