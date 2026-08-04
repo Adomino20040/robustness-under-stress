@@ -30,7 +30,7 @@ and tracks metric decay (F1, ROC-AUC, PR-AUC) across noise levels, producing **m
 
 ## Project status
 
-🚧 **Work progress**.
+**Work progress**.
 
 - [x] Environment and repository setup
 - [x] Automated dataset download (Telco Customer Churn)
