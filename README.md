@@ -30,7 +30,7 @@ and tracks metric decay (F1, ROC-AUC, PR-AUC) across noise levels, producing **m
 
 ## Project status
 
-🚧 **Work in progress**. The project is being built incrementally. Current stage: **both domains audited, cross-domain analysis and final report up next**.
+**Work progress**.
 
 - [x] Environment and repository setup
 - [x] Automated dataset download (Telco Customer Churn)
@@ -38,8 +38,8 @@ and tracks metric decay (F1, ROC-AUC, PR-AUC) across noise levels, producing **m
 - [x] Preprocessing and baseline models (Logistic Regression, XGBoost)
 - [x] Black-box perturbation engine
 - [x] Audit loop and degradation metrics
-- [x] Second domain (Credit Card Fraud)
-- [ ] Cross-domain analysis and final report
+- [ ] Second domain (Credit Card Fraud)
+- [ ] Degradation curves, analysis, and final report
 
 ### Results so far
 
