@@ -38,7 +38,7 @@ and tracks metric decay (F1, ROC-AUC, PR-AUC) across noise levels, producing **m
 - [x] Preprocessing and baseline models (Logistic Regression, XGBoost)
 - [x] Black-box perturbation engine
 - [x] Audit loop and degradation metrics
-- [ ] Second domain (Credit Card Fraud)
+- [x] Second domain (Credit Card Fraud)
 - [ ] Degradation curves, analysis, and final report
 
 **First result (Domain A):** the hypothesis holds on churn. At 20% noise, XGBoost loses 8.9% ROC-AUC and 27% F1 against its clean baseline, while Logistic Regression loses only 4.1% and 3.4%. The complex ensemble degrades roughly 2x faster on every metric.
